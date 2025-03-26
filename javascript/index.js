@@ -1,4 +1,17 @@
-// Update fixed cities' times
+// Store original cities HTML and hide back link initially
+const originalCitiesHTML = document.querySelector("#cities").innerHTML;
+document.querySelector(".back-link").style.display = "none";
+
+const localTimeZone = moment.tz.guess();
+
+// Update current location text
+document.querySelector(
+  '#city option[value="local"]'
+).textContent = `Current location (${localTimeZone
+  .split("/")
+  .pop()
+  .replace("_", " ")})`;
+
 function updateTime() {
   function updateCityTime(cityId, timeZone) {
     const element = document.querySelector(`#${cityId}`);
@@ -21,8 +34,18 @@ let updateInterval;
 function updateCity(event) {
   if (updateInterval) clearInterval(updateInterval);
 
-  const cityTimeZone = event.target.value;
-  const cityName = cityTimeZone.split("/")[1].replace("_", " ");
+  // Show back link
+  document.querySelector(".back-link").style.display = "block";
+
+  const selectedValue = event.target.value;
+  const cityTimeZone =
+    selectedValue === "local" ? localTimeZone : selectedValue;
+
+  const cityName =
+    selectedValue === "local"
+      ? `Current Location (${localTimeZone.split("/").pop().replace("_", " ")})`
+      : cityTimeZone.split("/")[1].replace("_", " ");
+
   const displayElement = document.querySelector("#cities");
 
   function updateDisplay() {
@@ -41,6 +64,18 @@ function updateCity(event) {
   updateInterval = setInterval(updateDisplay, 1000);
 }
 
+// Back link functionality
+document.querySelector(".back-link").addEventListener("click", function (e) {
+  e.preventDefault();
+  if (updateInterval) clearInterval(updateInterval);
+  document.querySelector("#cities").innerHTML = originalCitiesHTML;
+  document.querySelector("#city").value = "";
+  document.querySelector(".back-link").style.display = "none";
+  updateTime();
+  setInterval(updateTime, 1000);
+});
+
+// Initial setup
 updateTime();
 setInterval(updateTime, 1000);
 document.querySelector("#city").addEventListener("change", updateCity);

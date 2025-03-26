@@ -52,3 +52,15 @@ footer {
   text-align: center;
   font-size: 18px;
 }
+a {
+  text-decoration: none;
+  color: #585889;
+}
+
+a:active {
+  color: #6a5acd;
+}
+
+a:hover {
+  color: #4b0082;
+}
