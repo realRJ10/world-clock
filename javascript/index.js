@@ -24,7 +24,6 @@ function updateTime() {
   }
 
   updateCityTime("tehran", "Asia/Tehran");
-  updateCityTime("los-angeles", "America/Los_Angeles");
   updateCityTime("tokyo", "Asia/Tokyo");
   updateCityTime("paris", "Europe/Paris");
 }
